@@ -1,3 +1,5 @@
+package datastructs;
+
 import java.util.Date;
 
 public class CNode{
