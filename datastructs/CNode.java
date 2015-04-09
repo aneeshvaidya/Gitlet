@@ -1,7 +1,8 @@
 package datastructs;
 
 import java.util.Date;
-import java.util.LinkedList
+import java.util.LinkedList;
+
 
 public class CNode{
 
@@ -18,6 +19,7 @@ public class CNode{
 		this.head = true;
 		this.id = this.hashCode();
 		this.date = new Date();
+		this.files = new LinkedList<CFile>();
 	}
 
 	public int getID(){
