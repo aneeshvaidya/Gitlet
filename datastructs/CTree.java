@@ -23,7 +23,7 @@ public class CTree implements Serializable{
 		this.branches = 1;
 	}
 
-	public CNode getCurrentBranch(){
+	public String getCurrentBranch(){
 		return this.currentBranch;
 	}
 
