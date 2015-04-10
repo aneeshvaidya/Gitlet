@@ -1,8 +1,9 @@
 package datastructs;
 
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class CFile{
+public class CFile implements Serializable{
 
 	private String name;
 	private HashMap<Integer, Integer> trackerMap;

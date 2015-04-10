@@ -2,13 +2,14 @@ package datastructs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.Serializable;
 
 /**
 *	This is a CTree class, created to maintain a record of all branch names, and current head pointers
 *	at each branch. The name implies it is a tree, when it is more like a collection of pointers.
 **/
 
-public class CTree{
+public class CTree implements Serializable{
 
 	private HashMap<String, CNode> heads;
 	private ArrayList<String> branchNames;
