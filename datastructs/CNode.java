@@ -2,24 +2,24 @@ package datastructs;
 
 import java.util.Date;
 import java.util.LinkedList;
+import java.io.Serializable;
 
-
-public class CNode{
+public class CNode implements Serializable{
 
 	private int id;
 	private String message;
-	private CNode prev;
 	private boolean head;
 	private Date date;
-	private LinkedList<CFile> files;
+	private LinkedList<String> files;
+	private int prevName;
 
 	public CNode(String message, CNode prev){
 		this.message = message;
-		this.prev = prev;
 		this.head = true;
 		this.id = this.hashCode();
 		this.date = new Date();
-		this.files = new LinkedList<CFile>();
+		this.files = new LinkedList<String>();
+		this.prevName = prev.getID();
 	}
 
 	public int getID(){
@@ -30,19 +30,19 @@ public class CNode{
 		return this.message;
 	}
 
-	public CNode getPrevious(){
-		return this.prev;
+	public int getPrevious(){
+		return this.prevName;
 	}
 
 	public boolean head(){
 		return this.head;
 	}
 
-	public Date getData(){
+	public Date getDate(){
 		return this.date;
 	}
 
-	public LinkedList<CFile> getFiles(){
+	public LinkedList<String> getFiles(){
 		return this.files;
 	}	
 }

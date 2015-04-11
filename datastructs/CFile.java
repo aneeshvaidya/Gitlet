@@ -6,11 +6,11 @@ import java.io.Serializable;
 public class CFile implements Serializable{
 
 	private String name;
-	private HashMap<Integer, Integer> trackerMap;
+	private HashMap<String, Integer> trackerMap; //hashmap of <branch name, commit id>
 
 	public CFile(String name){
 		this.name = name;
-		this.trackerMap = new HashMap<Integer, Integer>();
+		this.trackerMap = new HashMap<String, Integer>();
 	}
 
 	public String getName(){
