@@ -5,10 +5,29 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class Gitlet {
-    public static void main(String[] args){
 
+	private CTree commitTree;
+
+    public static void main(String[] args){
+        switch(args[0]){
+            case "init":
+                
+        }
+    }
+
+    private static void init(){
+    	File gitlet = new File(".gitlet");
+        if (!gitlet.exists()){
+            gitlet.mkdir();
+            CNode firstCommit = new CNode("initial commit", null);
+            commitTree = new CTree(firstCommit);
+        }
+        else{
+            System.out.println("A gitlet version control system already exists in the current directory");
+        }
     }
 
     private static CTree loadCommitTree() {
