@@ -19,7 +19,9 @@ public class CNode implements Serializable{
 		this.id = this.hashCode();
 		this.date = new Date();
 		this.files = new LinkedList<String>();
-		this.prevName = prev.getID();
+		if (prev != null){
+			this.prevName = prev.getID();
+		}
 	}
 
 	public int getID(){

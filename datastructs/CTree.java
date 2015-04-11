@@ -16,11 +16,13 @@ public class CTree implements Serializable{
 	private String currentBranch;
 	private int branches;
 
-	public CTree(){
+	public CTree(CNode commit){
 		this.heads = new HashMap<String, CNode>();
 		this.branchNames = new ArrayList<String>();
 		this.currentBranch = "master";
 		this.branches = 1;
+		this.heads.put(currentBranch, commit);
+		this.branchNames.add(currentBranch);
 	}
 
 	public String getCurrentBranch(){
