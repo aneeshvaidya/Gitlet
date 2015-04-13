@@ -12,8 +12,8 @@ import java.util.HashSet;
 
 public class CTree implements Serializable{
 
-	private HashMap<String, CNode> heads; //<branch name, head node>
-	private ArrayList<String> branchNames;
+	private HashMap<String, Integer> heads; //<branch name, ID of head node>
+	private ArrayList<CNode> tree; // HashSet dont work kno more
 	private String currentBranch;
 	private int branches;
 

@@ -1,6 +1,7 @@
 package datastructs;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,7 +15,7 @@ public class CNode implements Serializable{
 	private String message;
 	private Date date;
 	private int prevID;
-	private HashMap<String, String> oldFiles;
+	private HashMap<String, String> allFiles;
 	private HashMap<String, String> newFiles;
 
 	public CNode(String message, CNode previous){
@@ -23,27 +24,35 @@ public class CNode implements Serializable{
 		this.message = message;
 		this.date = new Date();
 		this.prevID = previous.id;
-		this.
+		this.allFiles = new HashMap<String,String>(previous.allFiles);
+		for (String key: previous.newFiles.keySet()){
+			this.allFiles.put(key, previous.newFiles.get(key));
+		}
+		this.newFiles = new HashMap<String,String>();
 	}
 	
-	public void addFiles(HashSet staged){
-		newFiles = staged;
-		if (this.prev != null){
-			for(String previous: this.prev.getOlds()){
-				if (!staged.contains(previous)){
-					oldFiles.add(previous);
-				}
-			}
-			for(String previous: this.prev.getNews()){
-				if (!staged.contains(previous)){
-					oldFiles.add(previous);
-				}
-			}
+	public void addFiles(HashSet<String> staged, HashSet<String> removal){
+		//removes all the files tagged for removal
+		for (String remove: removal){
+			this.allFiles.remove(remove);
 		}
+		
+		//adds all staged files to newFiles, and creates the path format for its value
+		//adds this time around's staged files into allFiles for update purposes
+		for (String stagedFile: staged){
+			String path = gitPathFormat(stagedFile, this.id);
+			this.newFiles.put(stagedFile, path);
+			this.allFiles.put(stagedFile, path);
+		}
+		
 		//add support for copying the files here
-		for(String fileName: this.newFiles){
-			copyFiles(new File(fileName), new File(".gitlet/"+this.id+"/"+fileName));
+		for(String fileName: this.newFiles.keySet()){
+			copyFiles(new File(fileName), new File(this.newFiles.get(fileName)));
 		}
+	}
+	
+	private static String gitPathFormat(String filename, int ID){
+		return ".gitlet/"+ID+"/"+filename;
 	}
 	
 	private static void copyFiles(File source, File destination){
@@ -59,12 +68,12 @@ public class CNode implements Serializable{
 		
 	}
 	
-	public HashSet<String> getNews(){
+	public HashMap<String,String> getNews(){
 		return this.newFiles;
 	}
 	
-	public HashSet<String> getOlds(){
-		return this.newFiles;
+	public HashMap<String,String> getAll(){
+		return this.allFiles;
 	}
 
 	public int getID(){
@@ -75,12 +84,8 @@ public class CNode implements Serializable{
 		return this.message;
 	}
 
-	public int getPrevious(){
-		return this.prevName;
-	}
-
-	public boolean head(){
-		return this.head;
+	public int getPreviousID(){
+		return this.prevID;
 	}
 
 	public Date getDate(){
