@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.io.IOException;
+import java.util.LinkedList;
 
 /**
 *	This is a CTree class, created to maintain a record of all branch names, and current head pointers
@@ -19,7 +20,7 @@ public class CTree implements Serializable{
 	private HashMap<String, Integer> branchHeads; //<branch name, ID of head node>
 	private ArrayList<CNode> tree; // HashSet dont work kno more
 	private String currentBranch;
-	private HashMap<String, Integer> cMessageToID = new HashMap<String, Integer>();
+	private HashMap<String, LinkedList<Integer>> cMessageToID = new HashMap<String, LinkedList<Integer>>();
 
 	public CTree(){
 		this.branchHeads = new HashMap<String, Integer>();
@@ -28,7 +29,7 @@ public class CTree implements Serializable{
 		CNode firstElement = new CNode("initial commit");
 		this.branchHeads.put(currentBranch,firstElement.getID());
 		this.tree.add(firstElement.getID(),firstElement);
-		this.cMessageToID.put(firstElement.getMessage(), firstElement.getID());
+		addToMTID(firstElement.getMessage(),firstElement.getID());
 	}
 
 	public String getCurrentBranch(){
@@ -46,22 +47,25 @@ public class CTree implements Serializable{
 		this.branchHeads.put(newBranchName, branchHeads.get(currentBranch));
 	}
 	
-//	public void newCommit(String message, HashSet staged){
-//		CNode currentNode = this.heads.get(currentBranch);
-//		CNode nextNode = new CNode(message, currentNode);
-//		nextNode.addFiles(staged); //put the staged items into the commit node
-//		heads.put(currentBranch, nextNode);
-//	}
-//	
+	private void addToMTID(String element, Integer id){
+		if (this.cMessageToID.containsKey(element)){
+			this.cMessageToID.get(element).add(id);
+		}else{
+			LinkedList<Integer> newVal = new LinkedList<Integer>();
+			newVal.add(id);
+			this.cMessageToID.put(element, newVal);
+		}
+	}
+	
 	public void newCommit(String message, HashSet<String> staged, HashSet<String> remove){
 		CNode previousNode = getHeadAtBranch(currentBranch);
 		CNode newCommitNode = new CNode(message,previousNode);
 		newCommitNode.addFiles(staged, remove);
 		this.branchHeads.put(currentBranch, newCommitNode.getID());
-		this.cMessageToID.put(newCommitNode.getMessage(), newCommitNode.getID());
+		addToMTID(newCommitNode.getMessage(), newCommitNode.getID());
 	}
 	
-	public int getID(String message){
+	public LinkedList<Integer> getID(String message){
 		return cMessageToID.get(message);
 	}
 	
