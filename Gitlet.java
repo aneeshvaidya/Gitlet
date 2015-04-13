@@ -10,8 +10,9 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class Gitlet {
+public class Gitlet implements Serializable{
 
 	private CTree commitTree;
 	private HashSet<String> staged;
