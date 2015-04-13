@@ -25,9 +25,16 @@ public class CNode implements Serializable{
 		this.date = new Date();
 		this.prevID = previous.id;
 		this.allFiles = new HashMap<String,String>(previous.allFiles);
-		for (String key: previous.newFiles.keySet()){
-			this.allFiles.put(key, previous.newFiles.get(key));
-		}
+		this.newFiles = new HashMap<String,String>();
+	}
+	
+	public CNode(String message){
+		this.id = CNode.commit;
+		CNode.commit+=1;
+		this.message = message;
+		this.date = new Date();
+		this.prevID = -1;
+		this.allFiles = new HashMap<String,String>();
 		this.newFiles = new HashMap<String,String>();
 	}
 	

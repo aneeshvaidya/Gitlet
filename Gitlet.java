@@ -7,13 +7,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.HashMap;
 
 public class Gitlet {
 
 	private CTree commitTree;
-	private HashMap<String, CFile> allFiles;
 	private HashSet<String> staged;
 	private HashSet<String> removal;
 
@@ -28,8 +28,7 @@ public class Gitlet {
     	File gitlet = new File(".gitlet");
         if (!gitlet.exists()){
             gitlet.mkdir();
-            CNode firstCommit = new CNode("initial commit", null);
-            commitTree = new CTree(firstCommit);
+            commitTree = new CTree();
             staged = new HashSet<String>();
             removal = new HashSet<String>();
         }
@@ -40,7 +39,7 @@ public class Gitlet {
     
     private void add(String fileName){
     	File addFile = new File(fileName);
-    	if (! addFile.exists()){
+    	if (addFile.exists()){
     		staged.add(fileName);
     		//missing if file has been modified
     		int commitID = allFiles.get(fileName).getCommitAtBranch(commitTree.getCurrentBranch());
@@ -50,6 +49,11 @@ public class Gitlet {
     		System.out.println("File does not exist");
     	}
     	
+    }
+    
+    private boolean sameFile(String fileName){
+    	CNode current = CTree.getCurrentHead();
+    	Arrays.equals(Files.readAllBytes((new File(fileName)).toPath()), arg1)
     }
     
     private void commit(String message){
