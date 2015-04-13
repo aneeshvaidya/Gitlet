@@ -16,34 +16,34 @@ import java.io.IOException;
 
 public class CTree implements Serializable{
 
-	private static HashMap<String, Integer> branchHeads; //<branch name, ID of head node>
-	private static ArrayList<CNode> tree; // HashSet dont work kno more
-	private static String currentBranch;
-	private static HashMap<String, Integer> cMessageToID = new HashMap<String, Integer>();
+	private HashMap<String, Integer> branchHeads; //<branch name, ID of head node>
+	private ArrayList<CNode> tree; // HashSet dont work kno more
+	private String currentBranch;
+	private HashMap<String, Integer> cMessageToID = new HashMap<String, Integer>();
 
 	public CTree(){
-		CTree.branchHeads = new HashMap<String, Integer>();
-		CTree.tree = new ArrayList<CNode>();
-		CTree.currentBranch = "master";
+		this.branchHeads = new HashMap<String, Integer>();
+		this.tree = new ArrayList<CNode>();
+		this.currentBranch = "master";
 		CNode firstElement = new CNode("initial commit");
-		CTree.branchHeads.put(currentBranch,firstElement.getID());
-		CTree.tree.add(firstElement.getID(),firstElement);
-		CTree.cMessageToID.put(firstElement.getMessage(), firstElement.getID());
+		this.branchHeads.put(currentBranch,firstElement.getID());
+		this.tree.add(firstElement.getID(),firstElement);
+		this.cMessageToID.put(firstElement.getMessage(), firstElement.getID());
 	}
 
 	public String getCurrentBranch(){
-		return CTree.currentBranch;
+		return this.currentBranch;
 	}
 
 	public CNode getHeadAtBranch(String branchName){
 		if (branchName == null){
 			return null;
 		}
-		return getCNode(CTree.branchHeads.get(branchName));
+		return getCNode(this.branchHeads.get(branchName));
 	}
 
 	public void branchTree(String newBranchName){
-		CTree.branchHeads.put(newBranchName, branchHeads.get(currentBranch));
+		this.branchHeads.put(newBranchName, branchHeads.get(currentBranch));
 	}
 	
 //	public void newCommit(String message, HashSet staged){
@@ -57,8 +57,8 @@ public class CTree implements Serializable{
 		CNode previousNode = getHeadAtBranch(currentBranch);
 		CNode newCommitNode = new CNode(message,previousNode);
 		newCommitNode.addFiles(staged, remove);
-		CTree.branchHeads.put(currentBranch, newCommitNode.getID());
-		CTree.cMessageToID.put(newCommitNode.getMessage(), newCommitNode.getID());
+		this.branchHeads.put(currentBranch, newCommitNode.getID());
+		this.cMessageToID.put(newCommitNode.getMessage(), newCommitNode.getID());
 	}
 	
 	public int getID(String message){
