@@ -3,6 +3,7 @@ package datastructs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.util.HashSet;
 
 /**
 *	This is a CTree class, created to maintain a record of all branch names, and current head pointers
@@ -11,7 +12,7 @@ import java.io.Serializable;
 
 public class CTree implements Serializable{
 
-	private HashMap<String, CNode> heads;
+	private HashMap<String, CNode> heads; //<branch name, head node>
 	private ArrayList<String> branchNames;
 	private String currentBranch;
 	private int branches;
@@ -37,6 +38,17 @@ public class CTree implements Serializable{
 		branches++;
 		branchNames.add(newBranchName);
 		heads.put(newBranchName, heads.get(currentBranch));
+	}
+	
+	public void newCommit(String message, HashSet staged){
+		CNode currentNode = this.heads.get(currentBranch);
+		CNode nextNode = new CNode(message, currentNode);
+		nextNode.addFiles(staged); //put the staged items into the commit node
+		heads.put(currentBranch, nextNode);
+	}
+	
+	public CNode getID(int id){
+		//Given an ID, return the CNode at that point in time.
 	}
 
 }

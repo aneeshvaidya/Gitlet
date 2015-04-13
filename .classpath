@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/algs4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/algs4-package.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/checkstyle-5.9-all.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/gjdb.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/jh61b.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/StaffGitlet_obf.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/staffp0_obf.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/stdlib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/stdlib-package.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Casa SL/Documents/College classes/CS61b/avg/lib/xchart-2.4.3.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
