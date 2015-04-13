@@ -9,27 +9,21 @@ import java.nio.file.Files;
 
 public class CNode implements Serializable{
 
+	private static int commit = 0;
 	private int id;
 	private String message;
-	private boolean head;
 	private Date date;
-	private int prevName;
-	private HashSet<String> oldFiles;
-	private HashSet<String> newFiles;
-	private CNode prev, next;
+	private int prevID;
+	private HashMap<String, String> oldFiles;
+	private HashMap<String, String> newFiles;
 
 	public CNode(String message, CNode previous){
+		this.id = CNode.commit;
+		CNode.commit+=1;
 		this.message = message;
-		this.head = true;
-		this.id = this.hashCode();
 		this.date = new Date();
-		this.oldFiles = new HashSet<String>();
-		this.newFiles = new HashSet<String>();
-		this.prev = previous;
-		previous.next = this;
-		if (prev != null){
-			this.prevName = prev.getID();
-		}
+		this.prevID = previous.id;
+		this.
 	}
 	
 	public void addFiles(HashSet staged){
