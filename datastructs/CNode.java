@@ -65,12 +65,13 @@ public class CNode implements Serializable{
 	
 	public void revertToCommit(){
 		for (String fileLocation: this.allFiles.keySet()){
-			copyFiles(new File(this.newFiles.get(fileLocation)),new File(fileLocation));
+			revertFile(fileLocation);
 		}
 	}
 	
 	public void revertFile(String fileName){
-		
+		//you might need to change this to account for failure cases
+		copyFiles(new File(this.newFiles.get(fileName)),new File(fileName));
 	}
 	
 	private static void copyFiles(File source, File destination){
