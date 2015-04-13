@@ -34,7 +34,6 @@ public class Gitlet implements Serializable{
             case "remove":
                 g.remove(args[1]);
                 break;
-
         }
         saveGitlet(g);
     }
@@ -57,7 +56,9 @@ public class Gitlet implements Serializable{
     	if (addFile.exists()){
     		if (commitTree.fileChanged(fileName)){
     			staged.add(fileName);
-    		}else{
+    		} else if (!commitTree.fileInTree(fileName)){
+                staged.add(fileName);
+            } else{
     			System.out.println("File has not been modified since the last commit.");
     		}
     	}else{

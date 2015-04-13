@@ -78,9 +78,6 @@ public class CTree implements Serializable{
 	}
 	
 	public boolean fileInTree(String fileName){
-		System.out.println(getCurrentHead());
-		System.out.println(getCurrentHead().getAll());
-		System.out.println(getCurrentHead().getAll().keySet());
 		return getCurrentHead().getAll().keySet().contains(fileName);
 	}
 	
