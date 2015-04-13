@@ -18,10 +18,24 @@ public class Gitlet {
 	private HashSet<String> removal;
 
     public static void main(String[] args){
+        Gitlet g = loadGitlet();
         switch(args[0]){
             case "init":
-                
+                g = new Gitlet();
+                g.init();
+                break;
+            case "add":
+                g.add(args[1]);
+                break;
+            case "commit":
+                g.commit(args[1]);
+                break;
+            case "remove":
+                g.remove(args[1]);
+                break;
+
         }
+        saveGitlet(g);
     }
 
     private void init(){
@@ -40,58 +54,71 @@ public class Gitlet {
     private void add(String fileName){
     	File addFile = new File(fileName);
     	if (addFile.exists()){
-    		staged.add(fileName);
-    		//missing if file has been modified
-    		if (!commitTree.hasChanged(fileName)){
+    		if (commitTree.fileChanged(fileName)){
     			staged.add(fileName);
     		}else{
     			System.out.println("File has not been modified since the last commit.");
     		}
-    		
-    	}
-    	else{
+    	}else{
     		System.out.println("File does not exist");
     	}
-    	
     }
 
     
-    private void commit(String message){
-    	//Update CTree by calling new commit
-    	//Update CFile
-    	//Clear staged, clear remove
+    private void commit(String message) {
+        commitTree.newCommit(message, staged, removal);
+        staged.clear();
+        removal.clear();
     }
-    
-    private static CTree loadCommitTree() {
-		CTree commitTree = null;
-		File commitFile = new File("commitTree.ser");
-		if (commitFile.exists()) {
+
+    private void remove(String fileName) {
+        File removeFile = new File(fileName);
+        if (staged.contains(fileName)) {
+            staged.remove(fileName);
+        } else if (commitTree.fileInTree(fileName)){
+            removal.add(fileName);
+        } else{
+            System.out.println("No reason to remove the file.");
+        }
+    }
+
+    private void find(String message){
+        int commitID = commitTree.getID(message);
+//        for (int id : commitID) System.out.println(id);
+    }
+
+
+
+    private static Gitlet loadGitlet(){
+		Gitlet g = null;
+		File gitlet = new File(".gitlet.ser");
+		if (gitlet.exists()) {
             try {
-                FileInputStream fileIn = new FileInputStream(commitFile);
+                FileInputStream fileIn = new FileInputStream(gitlet);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-                commitTree = (CTree) objectIn.readObject();
+                g = (Gitlet) objectIn.readObject();
             } catch (IOException e) {
-                String msg = "IOException while loading commit tree.";
+                String msg = "IOException while loading Gitlet state.";
                 System.out.println(msg);
             } catch (ClassNotFoundException e) {
-                String msg = "ClassNotFoundException while loading commit tree.";
+                String msg = "ClassNotFoundException while loading Gitlet state.";
                 System.out.println(msg);
             }	
     	}
-    	return commitTree;
+    	return g;
 	}
 
-	private static void saveCommitTree(CTree commitTree){
-		if(commitTree == null){
+	private static void saveGitlet(Gitlet g){
+		if(g == null){
 			return;
 		}
 		try {
-            File commitFile = new File("commitTree.ser");
-            FileOutputStream fileOut = new FileOutputStream(commitFile);
+            File saveFile = new File(".gitlet.ser");
+            FileOutputStream fileOut = new FileOutputStream(saveFile);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(commitTree);
+            objectOut.writeObject(g);
         } catch (IOException e) {
-            String msg = "IOException while saving commit tree.";
+            String msg = "IOException while saving Gitlet.";
             System.out.println(msg);
         }
 
