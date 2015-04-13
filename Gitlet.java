@@ -42,7 +42,11 @@ public class Gitlet {
     	if (addFile.exists()){
     		staged.add(fileName);
     		//missing if file has been modified
-    		int commitID = allFiles.get(fileName).getCommitAtBranch(commitTree.getCurrentBranch());
+    		if (!commitTree.hasChanged(fileName)){
+    			staged.add(fileName);
+    		}else{
+    			System.out.println("File has not been modified since the last commit.");
+    		}
     		
     	}
     	else{
@@ -50,11 +54,7 @@ public class Gitlet {
     	}
     	
     }
-    
-    private boolean sameFile(String fileName){
-    	CNode current = CTree.getCurrentHead();
-    	Arrays.equals(Files.readAllBytes((new File(fileName)).toPath()), arg1)
-    }
+
     
     private void commit(String message){
     	//Update CTree by calling new commit

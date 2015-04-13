@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.HashSet;
+import java.io.IOException;
 
 /**
 *	This is a CTree class, created to maintain a record of all branch names, and current head pointers
@@ -70,12 +71,27 @@ public class CTree implements Serializable{
 		return getHeadAtBranch(currentBranch);
 	}
 	
-	public boolean fileInTree()
+	public boolean fileInTree(String fileName){
+		return getCurrentHead().getAll().keySet().contains(fileName);
+	}
 	
-	public boolean sameFile(String fileName){
-		String fileNameInGitlet = getCurrentHead().getAll().get(fileName);
-		return Arrays.equals(Files.readAllBytes((new File(fileName)).toPath()), Files.readAllBytes((new File(fileNameInGitlet)).toPath()));
-		
+	public boolean hasChanged(String fileName){
+		try{
+			if (fileInTree(fileName)){
+				String fileNameInGitlet = getCurrentHead().getAll().get(fileName);
+				return Arrays.equals(
+						Files.readAllBytes((new File(fileName)).toPath()), 
+						Files.readAllBytes((new File(fileNameInGitlet)).toPath()));
+			}else{
+				return false;
+			}
+			
+			
+		}
+		catch(IOException e){
+			System.out.println("You threw an exception on sameFile in CTree");
+			return false;
+		}
 	}
 
 }
