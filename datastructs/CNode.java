@@ -56,10 +56,21 @@ public class CNode implements Serializable{
 		for(String fileName: this.newFiles.keySet()){
 			copyFiles(new File(fileName), new File(this.newFiles.get(fileName)));
 		}
+		
 	}
 	
 	private static String gitPathFormat(String filename, int ID){
 		return ".gitlet/"+ID+"/"+filename;
+	}
+	
+	public void revertToCommit(){
+		for (String fileLocation: this.allFiles.keySet()){
+			copyFiles(new File(this.newFiles.get(fileLocation)),new File(fileLocation));
+		}
+	}
+	
+	public void revertFile(String fileName){
+		
 	}
 	
 	private static void copyFiles(File source, File destination){

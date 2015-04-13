@@ -75,7 +75,7 @@ public class CTree implements Serializable{
 		return getCurrentHead().getAll().keySet().contains(fileName);
 	}
 	
-	public boolean hasChanged(String fileName){
+	public boolean fileChanged(String fileName){
 		try{
 			if (fileInTree(fileName)){
 				String fileNameInGitlet = getCurrentHead().getAll().get(fileName);
