@@ -36,6 +36,9 @@ public class CTree implements Serializable{
 	}
 
 	public CNode getHeadAtBranch(String branchName){
+		if (branchName == null){
+			return null;
+		}
 		return getCNode(CTree.branchHeads.get(branchName));
 	}
 
@@ -62,8 +65,11 @@ public class CTree implements Serializable{
 		return cMessageToID.get(message);
 	}
 	
-	public CNode getCNode(int id){
+	public CNode getCNode(Integer id){
 		//Given an ID, return the CNode at that point in time.
+		if (id == null){
+			return null;
+		}
 		return tree.get(id);
 	}
 	
