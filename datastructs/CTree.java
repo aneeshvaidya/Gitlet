@@ -36,15 +36,53 @@ public class CTree implements Serializable{
 		return this.currentBranch;
 	}
 
-	public CNode getHeadAtBranch(String branchName){
+	public boolean isABranch(String branchName){
+		return branchHeads.containsKey(branchName);
+	}
+	
+	private CNode getHeadAtBranch(String branchName){
 		if (branchName == null){
 			return null;
 		}
 		return getCNode(this.branchHeads.get(branchName));
 	}
+	
+	public void revertToBranch(String branchName){
+		getHeadAtBranch(branchName).revertToCommit();;
+		this.currentBranch=branchName;
+	}
+	
+	public void revertSingleFile(String fileName){
+		getCurrentHead().revertFile(fileName);
+	}
+	
+	public void revertSingleFileBranch(Integer commitID, String fileName){
+		CNode requestedCommit = getCNode(commitID);
+		if (requestedCommit == null){
+			System.out.println("No commit with that id exists.");
+		}else if(requestedCommit.fileExistsInCommit(fileName)){
+			getCNode(commitID).revertFile(fileName);
+		}else{
+			System.out.println("No need to checkout the current branch.");
+		}
+	}
+	
+	public void rmBranch(String branchName){
+		if(! branchHeads.containsKey(branchName)){
+			System.out.println("A branch with that name does not exist.");
+		}else if(branchName == currentBranch){
+			System.out.println("Cannot remove the current branch.");
+		}else{
+			branchHeads.remove(branchName);
+		}
+	}
 
 	public void branchTree(String newBranchName){
-		this.branchHeads.put(newBranchName, branchHeads.get(currentBranch));
+		if (branchHeads.containsKey(newBranchName)){
+			System.out.print("A branch with that name already exists.");
+		}else{
+			this.branchHeads.put(newBranchName, branchHeads.get(currentBranch));
+		}
 	}
 	
 	private void addToMTID(String element, Integer id){
@@ -57,9 +95,15 @@ public class CTree implements Serializable{
 		}
 	}
 	
+	public HashMap<String, Integer> getBranches(){
+		return this.branchHeads;
+	}
+	
 	public void newCommit(String message, HashSet<String> staged, HashSet<String> remove){
+		
 		CNode previousNode = getHeadAtBranch(currentBranch);
-		CNode newCommitNode = new CNode(message,previousNode);
+		CNode newCommitNode = new CNode(message,previousNode, tree.size());
+		
 		newCommitNode.addFiles(staged, remove);
 		this.branchHeads.put(currentBranch, newCommitNode.getID());
 		this.tree.put(newCommitNode.getID(),newCommitNode);
@@ -70,7 +114,7 @@ public class CTree implements Serializable{
 		return cMessageToID.get(message);
 	}
 	
-	public CNode getCNode(Integer id){
+	private CNode getCNode(Integer id){
 		//Given an ID, return the CNode at that point in time.
 		if (id == null){
 			return null;
@@ -78,7 +122,7 @@ public class CTree implements Serializable{
 		return tree.get(id);
 	}
 	
-	private CNode getCurrentHead(){
+	public CNode getCurrentHead(){
 		return getHeadAtBranch(currentBranch);
 	}
 	
@@ -103,6 +147,13 @@ public class CTree implements Serializable{
 			System.out.println("You threw an exception on sameFile in CTree");
 			return false;
 		}
+	}
+	
+	public CNode getPrevious(CNode a){
+		if (a.getID() == -1){
+			return null;
+		}
+		return tree.get(a.getPreviousID());
 	}
 
 }

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class Gitlet implements Serializable{
 
@@ -19,7 +20,7 @@ public class Gitlet implements Serializable{
 	private HashSet<String> removal;
 
     public static void main(String[] args){
-        Gitlet g = loadGitlet();
+    	Gitlet g = loadGitlet();
         switch(args[0]){
             case "init":
                 g = new Gitlet();
@@ -34,6 +35,29 @@ public class Gitlet implements Serializable{
             case "remove":
                 g.remove(args[1]);
                 break;
+            case "log":
+            	g.log();
+            	break;
+            case "find":
+            	g.find(args[1]);
+            	break;
+            case "status":
+            	g.status();
+            	break;
+            case "checkout":
+            	if (args.length>3){
+            		g.checkout(Integer.parseInt(args[1]), args[2]);
+            	}else{
+            		g.checkout(args[1]);
+            	}
+            	break;
+            case "branch":
+            	g.branch(args[1]);
+            	break;
+            case "rm-branch":
+            	g.removeBranch(args[1]);
+            	break;
+            
         }
         saveGitlet(g);
     }
@@ -66,7 +90,6 @@ public class Gitlet implements Serializable{
     	}
     }
 
-    
     private void commit(String message) {
         commitTree.newCommit(message, staged, removal);
         staged.clear();
@@ -74,7 +97,6 @@ public class Gitlet implements Serializable{
     }
 
     private void remove(String fileName) {
-        File removeFile = new File(fileName);
         if (staged.contains(fileName)) {
             staged.remove(fileName);
         } else if (commitTree.fileInTree(fileName)){
@@ -87,9 +109,63 @@ public class Gitlet implements Serializable{
     private void find(String message){
         for (int id : commitTree.getID(message)) System.out.println(id);
     }
+    
+    private void log(){
+    	String returnValue = "";
+    	CNode current = commitTree.getCurrentHead();
+    	while (current != null){
+    		returnValue+="====\n"+"Commit "+current.getID()+".\n"+current.getDate().toString()+"\n"+current.getMessage()+"\n\n";
+    		current = commitTree.getPrevious(current);
+    	}
+    	System.out.println(returnValue);
+    }
+    
+    private void status(){
+    	System.out.println("=== Branches ===");
+    	for (String branchName: commitTree.getBranches().keySet()){
+    		if (branchName == commitTree.getCurrentBranch()){
+    			System.out.println("*"+branchName);
+    		}else{
+    			System.out.println(branchName);
+    		}
+    	}
+    	System.out.println("=== Staged Files ===");
+    	for (String stagedFiles: staged){
+    		System.out.println(stagedFiles);
+    	}
+    	System.out.println("=== Files Marked for Removal ===");
+    	for (String removalFiles: removal){
+    		System.out.println(removalFiles);
+    	}
+    	
+    }
 
-
-
+    private void checkout(String name){
+    	//case branch
+    	//case file
+    	//fail message
+    	if (commitTree.isABranch(name)){
+    		//case it's a branch
+    		commitTree.revertToBranch(name);
+    	}else if(commitTree.fileInTree(name)){
+    		commitTree.revertSingleFile(name);
+    	}else{
+    		System.out.println("File does not exist in the most recent commit, or no such branch exists.");
+    	}
+    }
+    
+    private void checkout (Integer commitID, String fileName){
+    	commitTree.revertSingleFileBranch(commitID,fileName);
+    }
+    
+    private void branch(String branchName){
+    	commitTree.branchTree(branchName);
+    }
+    
+    private void removeBranch(String branchName){
+    	commitTree.rmBranch(branchName);
+    }
+    
     private static Gitlet loadGitlet(){
 		Gitlet g = null;
 		File gitlet = new File(".gitlet.ser");

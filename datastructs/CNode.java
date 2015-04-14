@@ -1,6 +1,6 @@
 package datastructs;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.io.IOException;
@@ -10,29 +10,26 @@ import java.nio.file.Files;
 
 public class CNode implements Serializable{
 
-	private static int commit = 0;
 	private int id;
 	private String message;
-	private Date date;
+	private String date;
 	private int prevID;
 	private HashMap<String, String> allFiles;
 	private HashMap<String, String> newFiles;
 
-	public CNode(String message, CNode previous){
-		this.id = CNode.commit;
-		CNode.commit+=1;
+	public CNode(String message, CNode previous, int idFromSize){
 		this.message = message;
-		this.date = new Date();
+		this.id = idFromSize;
+		this.date = calculateDate();
 		this.prevID = previous.id;
 		this.allFiles = new HashMap<String,String>(previous.allFiles);
 		this.newFiles = new HashMap<String,String>();
 	}
 	
 	public CNode(String message){
-		this.id = CNode.commit;
-		CNode.commit+=1;
+		this.id = 0;
 		this.message = message;
-		this.date = new Date();
+		this.date = calculateDate();
 		this.prevID = -1;
 		this.allFiles = new HashMap<String,String>();
 		this.newFiles = new HashMap<String,String>();
@@ -107,19 +104,18 @@ public class CNode implements Serializable{
 		return this.prevID;
 	}
 
-	public Date getDate(){
+	private String calculateDate(){
+		String tFormat=Calendar.YEAR+"-"+Calendar.MONTH+"-"+Calendar.DATE+" ";
+		tFormat += Calendar.HOUR+":"+Calendar.MINUTE+":"+Calendar.SECOND;
+		
+		return tFormat;
+	}
+	
+	public String getDate(){
 		return this.date;
 	}
 
-//	//edit everything from here onwards
-//	public LinkedList<String> getFiles(){
-//		return this.files;
-//	}
-//	
-//	public CNode(CNode, LinkedList<File> ){
-//		//used for creating a new CNode from a added linked list
-//	}
-//	
-//	public stage(LinkedList<File>)
-	
+	public boolean fileExistsInCommit(String file){
+		return allFiles.containsKey(file);
+	}
 }
