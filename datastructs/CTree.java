@@ -67,6 +67,12 @@ public class CTree implements Serializable{
 		}
 	}
 	
+	public void resetToCommit(Integer commitID){
+		CNode target = getCNode(commitID);
+		target.revertToCommit();;
+		this.branchHeads.put(currentBranch, target.getID());
+	}
+	
 	public void rmBranch(String branchName){
 		if(! branchHeads.containsKey(branchName)){
 			System.out.println("A branch with that name does not exist.");

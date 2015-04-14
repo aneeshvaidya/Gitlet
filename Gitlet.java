@@ -57,6 +57,9 @@ public class Gitlet implements Serializable{
             case "rm-branch":
             	g.removeBranch(args[1]);
             	break;
+            case "reset":
+            	g.reset(Integer.parseInt(args[1]));
+            	break;
             
         }
         saveGitlet(g);
@@ -164,6 +167,10 @@ public class Gitlet implements Serializable{
     
     private void removeBranch(String branchName){
     	commitTree.rmBranch(branchName);
+    }
+    
+    private void reset(Integer id){
+    	commitTree.resetToCommit(id);
     }
     
     private static Gitlet loadGitlet(){
