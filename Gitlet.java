@@ -85,8 +85,7 @@ public class Gitlet implements Serializable{
     }
 
     private void find(String message){
-        int commitID = commitTree.getID(message);
-//        for (int id : commitID) System.out.println(id);
+        for (int id : commitTree.getID(message)) System.out.println(id);
     }
 
 
