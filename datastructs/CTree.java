@@ -18,17 +18,17 @@ import java.util.LinkedList;
 public class CTree implements Serializable{
 
 	private HashMap<String, Integer> branchHeads; //<branch name, ID of head node>
-	private ArrayList<CNode> tree; // HashSet dont work kno more
+	private HashMap<Integer,CNode> tree; 
 	private String currentBranch;
 	private HashMap<String, LinkedList<Integer>> cMessageToID = new HashMap<String, LinkedList<Integer>>();
 
 	public CTree(){
 		this.branchHeads = new HashMap<String, Integer>();
-		this.tree = new ArrayList<CNode>();
+		this.tree = new HashMap<Integer,CNode>();
 		this.currentBranch = "master";
 		CNode firstElement = new CNode("initial commit");
 		this.branchHeads.put(currentBranch,firstElement.getID());
-		this.tree.add(firstElement.getID(),firstElement);
+		this.tree.put(firstElement.getID(),firstElement);
 		addToMTID(firstElement.getMessage(),firstElement.getID());
 	}
 
@@ -62,6 +62,7 @@ public class CTree implements Serializable{
 		CNode newCommitNode = new CNode(message,previousNode);
 		newCommitNode.addFiles(staged, remove);
 		this.branchHeads.put(currentBranch, newCommitNode.getID());
+		this.tree.put(newCommitNode.getID(),newCommitNode);
 		addToMTID(newCommitNode.getMessage(), newCommitNode.getID());
 	}
 	
