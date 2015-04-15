@@ -72,7 +72,6 @@ public class CNode implements Serializable{
 	}
 	
 	private static boolean isGitPath(File fileName){
-		System.out.println(fileName.toPath().toString());
 		return fileName.toPath().toString().startsWith(".");		
 	}
 	
@@ -80,7 +79,6 @@ public class CNode implements Serializable{
 	    //This method copies the file in source to destination.
 		try{
 			if (isGitPath(destination)){ //are you trying to copy into the git folder?
-				System.out.println("Source was git path");
 				if(!destination.getParentFile().exists()){
 		    		destination.getParentFile().mkdirs();
 		    	}
@@ -91,24 +89,7 @@ public class CNode implements Serializable{
 			}
 		} catch (IOException e){
 	    	System.out.println("You threw an exception copying files");
-	    }
-		
-		
-//		try{
-//	    	if (destination.getParentFile() == null){
-//	    		Files.copy(source.toPath(), destination.toPath());
-//	    	}
-//	    	else
-//			if(!destination.getParentFile().exists()){
-//	    		destination.getParentFile().mkdirs();
-//	    	}else{
-//	    		Files.copy(source.toPath(), destination.toPath());
-//	    	}
-//			
-//	    } catch (IOException e){
-//	    	System.out.println("You threw an exception copying files");
-//	    }
-		
+	    }	
 	}
 	
 	public HashMap<String,String> getNews(){
