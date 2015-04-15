@@ -68,19 +68,46 @@ public class CNode implements Serializable{
 	
 	public void revertFile(String fileName){
 		//you might need to change this to account for failure cases
-		copyFiles(new File(this.newFiles.get(fileName)),new File(fileName));
+		copyFiles(new File(this.allFiles.get(fileName)),new File(fileName));
+	}
+	
+	private static boolean isGitPath(File fileName){
+		System.out.println(fileName.toPath().toString());
+		return fileName.toPath().toString().startsWith(".");		
 	}
 	
 	private static void copyFiles(File source, File destination){
 	    //This method copies the file in source to destination.
 		try{
-	    	if(!destination.getParentFile().exists()){
-	    		destination.getParentFile().mkdirs();
-	    	}
-			Files.copy(source.toPath(), destination.toPath());
-	    } catch (IOException e){
+			if (isGitPath(destination)){ //are you trying to copy into the git folder?
+				System.out.println("Source was git path");
+				if(!destination.getParentFile().exists()){
+		    		destination.getParentFile().mkdirs();
+		    	}
+				Files.copy(source.toPath(), destination.toPath());
+			}else{
+				Files.delete(destination.toPath());
+				Files.copy(source.toPath(), destination.toPath());
+			}
+		} catch (IOException e){
 	    	System.out.println("You threw an exception copying files");
 	    }
+		
+		
+//		try{
+//	    	if (destination.getParentFile() == null){
+//	    		Files.copy(source.toPath(), destination.toPath());
+//	    	}
+//	    	else
+//			if(!destination.getParentFile().exists()){
+//	    		destination.getParentFile().mkdirs();
+//	    	}else{
+//	    		Files.copy(source.toPath(), destination.toPath());
+//	    	}
+//			
+//	    } catch (IOException e){
+//	    	System.out.println("You threw an exception copying files");
+//	    }
 		
 	}
 	

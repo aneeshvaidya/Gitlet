@@ -76,18 +76,18 @@ public class GitletPublicTest {
      * Tests that checking out a file name will restore the version of the file
      * from the previous commit. Involves init, add, commit, and checkout.
      */
-//    @Test
-//    public void testBasicCheckout() {
-//        String wugFileName = TESTING_DIR + "wug.txt";
-//        String wugText = "This is a wug.";
-//        createFile(wugFileName, wugText);
-//        gitlet("init");
-//        gitlet("add", wugFileName);
-//        gitlet("commit", "added wug");
-//        writeFile(wugFileName, "This is not a wug.");
-//        gitlet("checkout", wugFileName);
-//        assertEquals(wugText, getText(wugFileName));
-//    }
+    @Test
+    public void testBasicCheckout() {
+        String wugFileName = TESTING_DIR + "wug.txt";
+        String wugText = "This is a wug.";
+        createFile(wugFileName, wugText);
+        gitlet("init");
+        gitlet("add", wugFileName);
+        gitlet("commit", "added wug");
+        writeFile(wugFileName, "This is not a wug.");
+        gitlet("checkout", wugFileName);
+        assertEquals(wugText, getText(wugFileName));
+    }
 
     /**
      * Tests that log prints out commit messages in the right order. Involves
