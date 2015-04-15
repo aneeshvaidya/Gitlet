@@ -191,7 +191,13 @@ public class Gitlet implements Serializable{
     }
     
     private void merge(String branchName){
-    	commitTree.mergeBranches(branchName);
+    	if(!commitTree.getBranches().containsKey(branchName)){
+    		System.out.println("A Branch with that name dows not exist");
+    	}else if(branchName.equals(commitTree.getCurrentBranch())){
+    		System.out.println("Cannot merge a branch with itself");
+    	}else{
+    		commitTree.mergeBranches(branchName);
+    	}
     }
     
     private static Gitlet loadGitlet(){
