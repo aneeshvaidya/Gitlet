@@ -81,9 +81,23 @@ public class Gitlet implements Serializable{
     private void add(String fileName){
     	File addFile = new File(fileName);
     	if (addFile.exists()){
-    		if (commitTree.fileChanged(fileName)){
-    			staged.add(fileName);
-    		} else if (!commitTree.fileInTree(fileName)){
+    		if (commitTree.fileInTree(fileName)){
+                String fileNameInGitlet = commitTree.getCurrentHead().getAll().get(fileName);
+                try {
+                    if (Arrays.equals(
+                            Files.readAllBytes((new File(fileName)).toPath()),
+                            Files.readAllBytes((new File(fileNameInGitlet)).toPath()))) {
+                        System.out.println("File has not been modified since the last commit.");
+
+                    }
+                    else{
+                        staged.add(fileName);
+                    }
+                } catch (IOException e) {
+                    System.out.println("You threw an exception comparing files.");
+                }
+
+            } else if (!commitTree.fileInTree(fileName)){
                 staged.add(fileName);
             } else{
     			System.out.println("File has not been modified since the last commit.");
