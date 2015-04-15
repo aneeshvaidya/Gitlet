@@ -75,7 +75,7 @@ public class CNode implements Serializable{
 		return fileName.toPath().toString().startsWith(".");		
 	}
 	
-	private static void copyFiles(File source, File destination){
+	public static void copyFiles(File source, File destination){
 	    //This method copies the file in source to destination.
 		try{
 			if (isGitPath(destination)){ //are you trying to copy into the git folder?

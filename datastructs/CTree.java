@@ -162,24 +162,72 @@ public class CTree implements Serializable{
 		return tree.get(a.getPreviousID());
 	}
 
-//	private 
-//	
-//	private HashMap<String, String> getSPFiles(String branch){
-//		CNode otherBranch = getHeadAtBranch(branch);
-//		CNode thisBranch = getCurrentHead();
-//		CNode split = getCNode(splitPoint(thisBranch, otherBranch));
-//		return split.getAll();
-//	}
-//	private int splitPoint(CNode a, CNode b){
-//		//returns ID of most recent ancestor, or -1 if no ancestor
-//		if(a.getID()==b.getID()){
-//			return a.getID();
-//		}else if((a.getPreviousID()==-1)||(b.getPreviousID()==-1)){
-//			return -1;
-//		}else if (a.getID()<b.getID()){
-//			return splitPoint(a, getPrevious(b));
-//		}else{
-//			return splitPoint(getPrevious(a),b);
-//		}
-//	}
+	public void mergeBranches(String branchName){
+		HashMap<String, String> splitPoint = getSPFiles(branchName);
+		HashMap<String, String> otherBranch = new HashMap<String, String>(getHeadAtBranch(branchName).getAll());
+		HashMap<String, String> thisBranch = new HashMap<String, String>(getCurrentHead().getAll());
+		
+		
+		//Remove all repeated files between SP and both branches' heads
+		//Result: otherBranch and thisBranch left with only files that have been modified
+		for (String file: splitPoint.keySet()){
+			if(otherBranch.containsKey(file)){
+				if(otherBranch.get(file)==splitPoint.get(file)){
+					otherBranch.remove(file);
+				}
+			}
+			if(thisBranch.containsKey(file)){
+				if(thisBranch.get(file)==splitPoint.get(file)){
+					thisBranch.remove(file);
+				}
+			}
+		}
+		
+		//Remove from otherBranch the files that have changed in this branch
+		//Both contain only the files that they've modified.
+		for (String file: thisBranch.keySet() ){			
+			//if a certain file is in both after that was filtered out, keep current branch in datastructures unchanged
+			//and copy over all the files but change their name to [oldfile].conflicted
+			if(otherBranch.containsKey(file)){
+				//copy files [conflicted].
+				CNode.copyFiles(new File(otherBranch.get(file)), new File(file+".conflicted"));
+				otherBranch.remove(file);
+			}
+		}
+		
+		//if file in otherBranch not in current
+		//copy it over
+		//remove those files from other branch
+		for (String file : otherBranch.keySet()){
+			if (!thisBranch.containsKey(file)){
+				//copy into current directory
+				CNode.copyFiles(new File(otherBranch.get(file)),new File(file));
+			}
+		}
+		
+		//Files in split point that are equal to the files on both branches should be removed(because they havent changed in either)
+		//if a certain file is in both after that was filtered out, keep current branch in datastructures unchanged
+		//and copy over all the files but change their name to [oldfile].conflicted
+		//files that have been modified in 1, and not in me, get put into me
+		
+	}
+	
+	private HashMap<String, String> getSPFiles(String branch){
+		CNode otherBranch = getHeadAtBranch(branch);
+		CNode thisBranch = getCurrentHead();
+		CNode split = getCNode(splitPoint(thisBranch, otherBranch));
+		return split.getAll();
+	}
+	private int splitPoint(CNode a, CNode b){
+		//returns ID of most recent ancestor, or -1 if no ancestor
+		if(a.getID()==b.getID()){
+			return a.getID();
+		}else if((a.getPreviousID()==-1)||(b.getPreviousID()==-1)){
+			return -1;
+		}else if (a.getID()<b.getID()){
+			return splitPoint(a, getPrevious(b));
+		}else{
+			return splitPoint(getPrevious(a),b);
+		}
+	}
 }
