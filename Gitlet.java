@@ -173,6 +173,10 @@ public class Gitlet implements Serializable{
     	commitTree.resetToCommit(id);
     }
     
+//    private void merge(String branchName){
+//    	commitTree.mergeBranches(String branchName);
+//    }
+//    
     private static Gitlet loadGitlet(){
 		Gitlet g = null;
 		File gitlet = new File(".gitlet.ser");

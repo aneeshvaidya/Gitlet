@@ -162,4 +162,24 @@ public class CTree implements Serializable{
 		return tree.get(a.getPreviousID());
 	}
 
+//	private 
+//	
+//	private HashMap<String, String> getSPFiles(String branch){
+//		CNode otherBranch = getHeadAtBranch(branch);
+//		CNode thisBranch = getCurrentHead();
+//		CNode split = getCNode(splitPoint(thisBranch, otherBranch));
+//		return split.getAll();
+//	}
+//	private int splitPoint(CNode a, CNode b){
+//		//returns ID of most recent ancestor, or -1 if no ancestor
+//		if(a.getID()==b.getID()){
+//			return a.getID();
+//		}else if((a.getPreviousID()==-1)||(b.getPreviousID()==-1)){
+//			return -1;
+//		}else if (a.getID()<b.getID()){
+//			return splitPoint(a, getPrevious(b));
+//		}else{
+//			return splitPoint(getPrevious(a),b);
+//		}
+//	}
 }
