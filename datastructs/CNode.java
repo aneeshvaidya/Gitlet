@@ -124,6 +124,6 @@ public class CNode implements Serializable{
 	}
 
 	public boolean fileExistsInCommit(String file){
-		return allFiles.containsKey(file);
+		return this.allFiles.containsKey(file);
 	}
 }

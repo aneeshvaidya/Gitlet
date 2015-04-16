@@ -63,7 +63,7 @@ public class CTree implements Serializable{
 		}else if(requestedCommit.fileExistsInCommit(fileName)){
 			getCNode(commitID).revertFile(fileName);
 		}else{
-			System.out.println("No need to checkout the current branch.");
+			System.out.println("File does not exist in the most recent commit, or no such branch exists");
 		}
 	}
 	
@@ -204,12 +204,14 @@ public class CTree implements Serializable{
 				CNode.copyFiles(new File(otherBranch.get(file)),new File(file));
 			}
 		}
-		
-		//Files in split point that are equal to the files on both branches should be removed(because they havent changed in either)
-		//if a certain file is in both after that was filtered out, keep current branch in datastructures unchanged
-		//and copy over all the files but change their name to [oldfile].conflicted
-		//files that have been modified in 1, and not in me, get put into me
-		
+	}
+
+	public void rebase(String branchName){
+		//Copy the branch up until the split point and paste it in 
+		//if the passed in branch and the current branch are in the same branch, just advance the current branch to the head of the passed in branch
+		//files modified after the split point nor in current but in branchName should be kept as they are in branchName subsection
+		//files modified only on this stay as they are??? <-- check this
+		//conflicting files are replaced with branchName files
 	}
 	
 	private HashMap<String, String> getSPFiles(String branch){

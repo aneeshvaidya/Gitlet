@@ -45,7 +45,7 @@ public class Gitlet implements Serializable{
             	g.status();
             	break;
             case "checkout":
-            	if (args.length>3){
+            	if (args.length==3){
             		g.checkout(Integer.parseInt(args[1]), args[2]);
             	}else{
             		g.checkout(args[1]);
@@ -59,6 +59,7 @@ public class Gitlet implements Serializable{
             	break;
             case "reset":
             	g.reset(Integer.parseInt(args[1]));
+            	System.out.println(g.commitTree.getCurrentHead().getID());
             	break;
             case "merge":
             	g.merge(args[1]);
@@ -143,16 +144,18 @@ public class Gitlet implements Serializable{
     private void status(){
     	System.out.println("=== Branches ===");
     	for (String branchName: commitTree.getBranches().keySet()){
-    		if (branchName == commitTree.getCurrentBranch()){
+    		if (branchName.equals(commitTree.getCurrentBranch())){
     			System.out.println("*"+branchName);
     		}else{
     			System.out.println(branchName);
     		}
     	}
+    	System.out.println();
     	System.out.println("=== Staged Files ===");
     	for (String stagedFiles: staged){
     		System.out.println(stagedFiles);
     	}
+    	System.out.println();
     	System.out.println("=== Files Marked for Removal ===");
     	for (String removalFiles: removal){
     		System.out.println(removalFiles);
@@ -165,8 +168,11 @@ public class Gitlet implements Serializable{
     	//case file
     	//fail message
     	if (commitTree.isABranch(name)){
-    		//case it's a branch
-    		commitTree.revertToBranch(name);
+    		if(name.equals(commitTree.getCurrentBranch())){
+    			System.out.println("No need to checkout the current branch.");
+    		}else{
+    			commitTree.revertToBranch(name);
+    		}    		
     	}else if(commitTree.fileInTree(name)){
     		commitTree.revertSingleFile(name);
     	}else{
@@ -198,6 +204,10 @@ public class Gitlet implements Serializable{
     	}else{
     		commitTree.mergeBranches(branchName);
     	}
+    }
+    
+    private void rebase(String branchName){
+    	commitTree.rebase(branchName);
     }
     
     private static Gitlet loadGitlet(){
